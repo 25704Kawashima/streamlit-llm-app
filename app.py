@@ -20,13 +20,10 @@ selected_chat = st.radio(
 
 st.divider()
 
-if selected_chat == "システムエンジニア":
-    input_message = st.text_input(label="システムエンジニアへのメッセージを入力してください:")
-    system_template = "あなたは優秀なシステムエンジニアです。技術的な質問に対してわかりやすく気さくに答えてください。また、システムエンジニアリングのことを訊かれたら質問には答えず、他の専門家を勧めてください。"
-else:
-    input_message = st.text_input(label="歴史の専門家へのメッセージを入力してください:")
-    system_template = "あなたは歴史の専門家です。歴史に関する質問に対して詳しく丁寧に答えてください。また、歴史以外のことを訊かれたら質問には答えず、他の専門家を勧めてください。"
 
+input_message = st.text_input(label=f"{selected_chat}への質問を入力してください:")
+
+system_template = "あなたは{expert}です。質問に対してわかりやすく丁寧に答えてください。また、専門分野外の質問には答えず、その旨を伝えてください。"
 human_template = "{input}"
 
 prompt = ChatPromptTemplate.from_messages([
@@ -37,7 +34,7 @@ prompt = ChatPromptTemplate.from_messages([
 if st.button("送信"):
     st.divider()
 
-    messages = prompt.format_messages(input=input_message)
+    messages = prompt.format_messages(expert=selected_chat,input=input_message)
     result = llm(messages)
     st.write("### 回答:")
     st.write(result.content)
